@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>⛺ Camp Brainwave 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--pine:#1B4332;--bark:#6B4226;--cream:#FFF8F0;--gold:#F9C74F;--sun:#F4A261;--e:#7B2D8B;--el:#C77DFF;--ep:#F3E5FF;--o:#1B6CA8;--ol:#56CBF9;--op:#E0F4FF}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overflow-x:hidden;min-height:100vh}
+.app{max-width:680px;margin:0 auto;padding:0 0 2rem}
+.banner{background:var(--pine);padding:1rem 1.25rem .75rem;text-align:center;position:relative;overflow:hidden}
+.banner::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(255,255,255,.03) 8px,rgba(255,255,255,.03) 16px)}
+.bunting{display:flex;justify-content:center;margin-bottom:.5rem}
+.flag{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:16px solid;margin:0 2px}
+.f1{border-top-color:#E76F51}.f2{border-top-color:#F9C74F}.f3{border-top-color:#52B788}.f4{border-top-color:#AED9E0}.f5{border-top-color:#C77DFF}
+.ttl{font-family:'Lilita One',cursive;font-size:25px;color:#FFF8F0;text-shadow:2px 2px 0 var(--bark)}
+.sub{font-size:11px;color:rgba(255,248,240,.6);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.drow{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.6rem}
+.dbtn{background:rgba(255,248,240,.15);border:1px solid rgba(255,248,240,.25);border-radius:20px;padding:4px 14px;cursor:pointer;color:#FFF8F0;font-size:13px;font-family:'Nunito',sans-serif;font-weight:800}
+.dbtn:hover{background:rgba(255,248,240,.3)}.dbtn:disabled{opacity:.25;cursor:not-allowed}
+.dlbl{font-size:13px;color:#FFF8F0;font-weight:700;min-width:190px;text-align:center}
+.tjump{font-size:11px;background:rgba(249,199,79,.2);border:1px solid rgba(249,199,79,.45);border-radius:20px;padding:3px 12px;cursor:pointer;color:var(--gold);font-family:'Nunito',sans-serif;font-weight:800;display:none;margin-top:5px}
+.syncbar{background:rgba(255,248,240,.08);padding:4px 12px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:10px;font-weight:800;color:rgba(255,248,240,.5);letter-spacing:.05em}
+.syncdot{width:7px;height:7px;border-radius:50%;background:#52B788;flex-shrink:0;transition:background .3s}
+.syncdot.saving{background:var(--gold);animation:pulse .6s infinite alternate}
+.syncdot.err{background:#E76F51}
+@keyframes pulse{from{opacity:.4}to{opacity:1}}
+.ctabs{display:grid;grid-template-columns:1fr 1fr}
+.ctab{padding:13px 16px;cursor:pointer;text-align:center;transition:all .2s;border-bottom:3px solid transparent;background:var(--cream)}
+.ctab.e{border-top:4px solid var(--e)}.ctab.o{border-top:4px solid var(--o)}
+.ctab.e.active{background:var(--ep);border-bottom:3px solid var(--e)}
+.ctab.o.active{background:var(--op);border-bottom:3px solid var(--o)}
+.ctab:not(.active){opacity:.6}
+.ctab-name{font-family:'Lilita One',cursive;font-size:15px;display:block}
+.ctab.e .ctab-name{color:var(--e)}.ctab.o .ctab-name{color:var(--o)}
+.ctab-em{font-size:21px;display:block;margin-bottom:2px}
+.xpa{padding:12px 14px;background:var(--pine);border-radius:0 0 14px 14px;margin:0 1rem .75rem}
+.xpr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.xpl{font-size:11px;color:rgba(255,248,240,.65);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.xpp{font-family:'Lilita One',cursive;font-size:18px;color:var(--gold)}
+.xpt{height:10px;border-radius:5px;background:rgba(255,255,255,.15);overflow:hidden}
+.xpfe{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--e),var(--el));transition:width .5s}
+.xpfo{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--o),var(--ol));transition:width .5s}
+.vpast{background:#fff8e8;border:1.5px solid var(--gold);border-radius:10px;padding:7px 14px;margin:0 1rem .5rem;font-size:12px;font-weight:800;color:#8a6a00;display:none;text-align:center}
+.vpast.show{display:block}
+.vgilmont{background:#e8f4ff;border:1.5px solid #90c8f0;border-radius:10px;padding:7px 14px;margin:0 1rem .5rem;font-size:12px;font-weight:800;color:#1a5a8a;display:none;text-align:center}
+.vgilmont.show{display:block}
+.pane{display:none;padding:0 1rem}.pane.active{display:block}
+.sh{display:flex;align-items:center;gap:8px;margin:1rem 0 .5rem}
+.shi{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.shi.e{background:var(--ep)}.shi.o{background:var(--op)}
+.sht{font-family:'Lilita One',cursive;font-size:14px;color:var(--bark)}
+.tw{margin-bottom:6px}
+.tc{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;transition:all .15s;border:2px solid transparent;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tc:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1)}
+.tc.done{background:#f5f5f5}.tc.done .ttxt{text-decoration:line-through;color:#aaa}.tc.done .ttime{opacity:.4}
+.tc.locked{opacity:.5;cursor:not-allowed;pointer-events:none;background:#f0f0f0}
+.tw.hlog .tc{border-radius:12px 12px 0 0;border-bottom:2px solid #f0ece4;box-shadow:none}
+.tck{width:26px;height:26px;border-radius:50%;border:2.5px solid #ddd;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;background:#fff;transition:all .2s}
+.tc.done .tck.e{background:var(--e);border-color:var(--e);color:#fff}
+.tc.done .tck.o{background:var(--o);border-color:var(--o);color:#fff}
+.tc.locked .tck{background:#e8e8e8;border-color:#ccc}
+.ttxt{font-size:13px;font-weight:700;flex:1}
+.trgt{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ttime{font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px;background:#f0ece4;color:#8a7560;white-space:nowrap}
+.tpts{font-size:10px;font-weight:800;padding:2px 7px;border-radius:10px}
+.tpts.e{background:var(--ep);color:var(--e)}.tpts.o{background:var(--op);color:var(--o)}
+.tpts.bonus{background:#FFF3CD;color:#856404}
+.lpanel{background:#fff;border:2px solid #f0ece4;border-top:none;border-radius:0 0 12px 12px;padding:10px 12px}
+.lrow{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:12px;font-weight:700;color:#3a2a1a;background:#faf8f5;border-radius:8px;padding:5px 8px;border:1px solid #f0e8dc}
+.ltxt{flex:1}.ldel{background:transparent;border:none;cursor:pointer;color:#ddd;font-size:13px;padding:0 2px}
+.ldel:hover{color:#f44}
+.linrow{display:flex;gap:6px;margin-top:6px}
+.linput{flex:1;padding:6px 10px;border-radius:20px;border:1.5px solid #e8e0d0;background:#faf8f5;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#2C1810;outline:none}
+.linput:focus{border-color:var(--sun)}
+.lbtn{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-family:'Lilita One',cursive;font-size:12px;color:#fff;white-space:nowrap}
+.lbtn.e{background:var(--e)}.lbtn.o{background:var(--o)}
+.bdg{display:none;margin:.75rem 0;padding:16px;border-radius:16px;text-align:center;position:relative;overflow:hidden}
+.bdg.show{display:block}
+.bdg.e{background:linear-gradient(135deg,var(--ep),#fff);border:2px solid var(--el)}
+.bdg.o{background:linear-gradient(135deg,var(--op),#fff);border:2px solid var(--ol)}
+.bsh{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--gold);opacity:.15}
+.bico{font-size:42px;animation:bb .5s cubic-bezier(.34,1.56,.64,1)}
+.bnm{font-family:'Lilita One',cursive;font-size:18px;margin:.25rem 0 .1rem}
+.bnm.e{color:var(--e)}.bnm.o{color:var(--o)}
+.bdsc{font-size:12px;color:#888;font-weight:700}
+@keyframes bb{0%{transform:scale(0) rotate(-10deg)}100%{transform:scale(1) rotate(0)}}
+.bbank{border-radius:16px;padding:16px;margin:8px 0}
+.bbank.e{background:linear-gradient(135deg,#2D1B40,#4A2060);border:2px solid var(--e)}
+.bbank.o{background:linear-gradient(135deg,#0D2E50,#1A4A70);border:2px solid var(--o)}
+.bbtop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.bblbl{font-family:'Lilita One',cursive;font-size:14px;color:rgba(255,255,255,.8)}
+.bbsub{font-size:10px;color:rgba(255,255,255,.45);font-weight:700;margin-top:2px}
+.bbpts{font-family:'Lilita One',cursive;font-size:34px;color:var(--gold);line-height:1}
+.bbhist{max-height:150px;overflow-y:auto}
+.bbrow{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:8px;margin-bottom:3px;font-size:11px;font-weight:700}
+.bbrow.earn{background:rgba(249,199,79,.15);color:rgba(255,255,255,.85)}
+.bbrow .bbp{font-family:'Lilita One',cursive;font-size:13px;color:var(--gold)}
+.bbempty{font-size:11px;color:rgba(255,255,255,.3);font-weight:700;text-align:center;padding:6px 0}
+.calbox{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 0 rgba(0,0,0,.06);margin:8px 0}
+.calnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cnbtn{background:transparent;border:1.5px solid #e8e0d0;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:13px;font-weight:800;color:#8a7560}
+.cnbtn:hover{background:#f5f0e8}
+.cmth{font-family:'Lilita One',cursive;font-size:14px;color:var(--bark)}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cdow{font-size:9px;font-weight:800;text-align:center;color:#bbb;text-transform:uppercase;padding-bottom:4px}
+.cday{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;font-weight:800;transition:all .15s;border:2px solid transparent;cursor:pointer;gap:2px;-webkit-tap-highlight-color:transparent}
+.cday:hover{transform:scale(1.08)}
+.cday.fut{color:#ddd;cursor:default;pointer-events:none;background:transparent;border-color:transparent}
+.cday.empty{cursor:default;pointer-events:none;background:transparent}
+.cday.ocamp{background:#f5f3ef;color:#bbb;border-color:#ede9e2}
+.cday.incamp{background:#f0ece4;color:#a09080;border-color:#e4ded4}
+.cday.gilmont{background:#dceeff;color:#6090b0;border-color:#aacce8;cursor:default;pointer-events:none}
+.cday.part.e{background:#ffe4b5;color:#8B6914;border-color:#f0c040}
+.cday.part.o{background:#b8e4ff;color:#0a4a7a;border-color:#60b8f0}
+.cday.comp.e{background:var(--e);color:#fff;border-color:#5a1f80;box-shadow:0 2px 8px rgba(123,45,139,.4)}
+.cday.comp.o{background:var(--o);color:#fff;border-color:#0d4a80;box-shadow:0 2px 8px rgba(27,108,168,.4)}
+.cday.tod{outline:3px solid var(--gold);outline-offset:1px}
+.cday.sel{outline:3px solid #333;outline-offset:1px}
+.cday .cstar{font-size:9px;line-height:1}
+.cleg{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.cli{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:#999}
+.cld{width:12px;height:12px;border-radius:4px;border:1.5px solid}
+.cfsec{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 0 rgba(0,0,0,.06);margin:8px 0}
+.cfsub{font-size:10px;color:#aaa;font-weight:700;margin-bottom:.6rem}
+.cfgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.cfcell{aspect-ratio:1;border-radius:8px;background:#f5f0e8;border:2px solid #e8e0d0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:#bbb;flex-direction:column;gap:1px;cursor:default}
+.cfcell.done.e{background:var(--e);border-color:#5a1f80;color:#fff}
+.cfcell.done.o{background:var(--o);border-color:#0d4a80;color:#fff}
+.cfcell.skip{background:#dceeff;border-color:#aacce8;color:#7aaac8}
+.cfcell .cff{font-size:12px;display:none}.cfcell.done .cff{display:block}
+.cfcell .cfn{font-size:7px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1rem 0}
+.stile{background:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.sir{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.sico{font-size:18px}.slbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#aaa}
+.sbig{font-family:'Lilita One',cursive;font-size:24px}
+.sbig.e{color:var(--e)}.sbig.o{color:var(--o)}
+.snote{font-size:10px;color:#bbb;font-weight:700;margin-top:1px}
+.mlinks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.mlinks.s1{grid-template-columns:1fr}
+.mlink{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#fff;border:2px solid var(--ep);text-decoration:none;transition:all .15s}
+.mlink.ol{border-color:var(--op)}.mlink:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.1)}
+.mlico{font-size:20px;flex-shrink:0}
+.mlgrd{font-family:'Lilita One',cursive;font-size:12px;color:var(--e)}.mlgrd.o{color:var(--o)}
+.mlsub{font-size:10px;color:#aaa;font-weight:700;margin-top:1px}
+.bkzone{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 0 rgba(0,0,0,.06);margin:8px 0}
+.bkzhdr{font-family:'Lilita One',cursive;font-size:13px;color:var(--bark);margin-bottom:.6rem}
+.bkinrow{display:flex;gap:6px;margin-bottom:10px}
+.bkinrow input{flex:1;padding:8px 12px;border-radius:20px;border:2px solid #e8e0d0;background:#faf8f5;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#2C1810;outline:none}
+.bkinrow input:focus{border-color:var(--sun)}
+.bkaddbtn{padding:8px 16px;border-radius:20px;border:none;cursor:pointer;font-family:'Lilita One',cursive;font-size:13px;color:#fff;white-space:nowrap}
+.bkaddbtn.e{background:var(--e)}.bkaddbtn.o{background:var(--o)}
+.bkitem{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#faf8f5;margin-bottom:5px;border:1.5px solid #f0e8dc}
+.bkico{font-size:20px}.bkinfo{flex:1;min-width:0}
+.bkttl{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bkdt{font-size:10px;color:#bbb;font-weight:700}
+.bkrew{font-family:'Lilita One',cursive;font-size:12px;padding:3px 9px;border-radius:10px}
+.bkrew.e{background:var(--ep);color:var(--e)}.bkrew.o{background:var(--op);color:var(--o)}
+.bkdel{background:transparent;border:none;cursor:pointer;font-size:16px;color:#ddd;padding:2px 4px}
+.bkdel:hover{color:#f44}
+.bkempty{font-size:12px;color:#bbb;font-weight:700;text-align:center;padding:8px 0}
+.cfwrap{pointer-events:none;position:fixed;inset:0;height:0;overflow:visible;z-index:999}
+.cfto{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 1.2s ease-in forwards}
+@keyframes cfall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(300px) rotate(720deg);opacity:0}}
+.movl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;padding:1.5rem}
+.movl.open{display:flex}
+.mbox{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.22)}
+.mtit{font-family:'Lilita One',cursive;font-size:18px;color:var(--bark);margin-bottom:3px}
+.msub2{font-size:12px;color:#aaa;font-weight:700;margin-bottom:14px}
+.melist{margin-bottom:10px;max-height:150px;overflow-y:auto}
+.merow{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;background:#faf8f5;border:1.5px solid #f0e8dc;margin-bottom:5px;font-size:13px;font-weight:700;color:#2C1810}
+.metxt{flex:1}.medel{background:transparent;border:none;cursor:pointer;color:#ccc;font-size:14px;padding:0 2px}
+.medel:hover{color:#f44}
+.meempty{font-size:12px;color:#ccc;font-weight:700;text-align:center;padding:6px 0 10px}
+.meinwrap{display:flex;gap:8px;margin-bottom:16px}
+.meinwrap input{flex:1;padding:10px 14px;border-radius:24px;border:2px solid #e0d8d0;background:#faf8f5;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#2C1810;outline:none}
+.meinwrap input:focus{border-color:var(--sun);background:#fff}
+.meaddbtn{padding:10px 16px;border-radius:24px;border:none;cursor:pointer;font-family:'Lilita One',cursive;font-size:13px;color:#fff;white-space:nowrap;flex-shrink:0}
+.meaddbtn.e{background:var(--e)}.meaddbtn.o{background:var(--o)}
+.mfoot{display:flex;gap:8px}
+.mdonebtn{flex:1;padding:11px;border-radius:24px;border:none;cursor:pointer;font-family:'Lilita One',cursive;font-size:15px;color:#fff}
+.mdonebtn.e{background:var(--e)}.mdonebtn.o{background:var(--o)}
+.mskipbtn{padding:11px 16px;border-radius:24px;border:2px solid #e0d8d0;background:transparent;cursor:pointer;font-family:'Lilita One',cursive;font-size:13px;color:#aaa}
+.mskipbtn:hover{background:#f5f0e8}
+</style>
+</head>
+<body>
+
+<div class="movl" id="movl">
+  <div class="mbox">
+    <div class="mtit" id="mtit">Log Pages</div>
+    <div class="msub2" id="msub2">What did you complete?</div>
+    <div class="melist" id="melist"></div>
+    <div class="meinwrap"><input type="text" id="meinput" placeholder="e.g. pp. 14–17…" autocomplete="off"/><button class="meaddbtn" id="meaddbtn">+ Add</button></div>
+    <div class="mfoot"><button class="mdonebtn" id="mdonebtn">✓ Mark Complete</button><button class="mskipbtn" id="mskipbtn">Skip</button></div>
+  </div>
+</div>
+
+<div class="app">
+  <div class="cfwrap" id="cfwrap"></div>
+  <div class="banner">
+    <div class="bunting"><span class="flag f1"></span><span class="flag f2"></span><span class="flag f3"></span><span class="flag f4"></span><span class="flag f5"></span><span class="flag f1"></span><span class="flag f2"></span><span class="flag f3"></span><span class="flag f4"></span><span class="flag f5"></span></div>
+    <div class="ttl">⛺ Camp Brainwave 2026</div>
+    <div class="sub">Summer Academy · May 26 – Aug 15 · Two Scholars</div>
+    <div class="drow">
+      <button class="dbtn" id="pbtn">◀ Prev</button>
+      <span class="dlbl" id="dlbl"></span>
+      <button class="dbtn" id="nbtn">Next ▶</button>
+    </div>
+    <div style="text-align:center;margin-top:5px"><button class="tjump" id="tjump">↩ Back to Today</button></div>
+    <div class="syncbar"><span class="syncdot" id="syncDot"></span><span id="syncLbl">synced</span></div>
+  </div>
+
+  <div class="ctabs">
+    <div class="ctab e active" id="tabe"><span class="ctab-em">🔮</span><span class="ctab-name">Cabin Elliot</span></div>
+    <div class="ctab o" id="tabo"><span class="ctab-em">🌊</span><span class="ctab-name">Cabin Oliver</span></div>
+  </div>
+
+  <div class="xpa">
+    <div class="xpr">
+      <span class="xpl" id="xple">🏕️ Elliot's XP</span>
+      <span class="xpl" id="xplo" style="display:none">🏕️ Oliver's XP</span>
+      <span class="xpp" id="xpp">0 XP</span>
+    </div>
+    <div class="xpt"><div id="xpf" class="xpfe" style="width:0%"></div></div>
+  </div>
+
+  <div class="vpast" id="vpast">📅 Viewing a past day — all tasks are fully editable!</div>
+  <div class="vgilmont" id="vgilmont">🏕️ Gilmont week — no quests required! Enjoy camp!</div>
+
+  <!-- ELLIOT -->
+  <div class="pane active" id="panee">
+    <div class="sh"><div class="shi e">🎯</div><span class="sht">Daily Quests</span></div>
+    <div id="tse"></div>
+    <div class="sh"><div class="shi e">⭐</div><span class="sht">Bonus Quests — Extra Credit</span></div>
+    <div id="exe"></div>
+    <div class="bdg e" id="bdge"><div class="bsh"></div><div class="bico" id="bice">🏕️</div><div class="bnm e" id="bnme">Camp Champion!</div><div class="bdsc" id="bdsce"></div></div>
+    <div class="sh"><div class="shi e">🏆</div><span class="sht">Bonus Point Bank</span></div>
+    <div class="bbank e">
+      <div class="bbtop">
+        <div><div class="bblbl">⭐ Elliot's Bonus Points</div><div class="bbsub">25 pts earned per bonus quest</div></div>
+        <div style="text-align:right"><div class="bbpts" id="bbpte">0</div><div class="bbsub">pts earned</div></div>
+      </div>
+      <div class="bbhist" id="bbhe"></div>
+    </div>
+    <div class="sh"><div class="shi e">📅</div><span class="sht">Daily Progress Calendar</span></div>
+    <div class="calbox" id="cale"></div>
+    <div class="sh"><div class="shi e">🔥</div><span class="sht">Campfire Log — 12 Weeks</span></div>
+    <div class="cfsec"><div class="cfsub">W4 &amp; W5: Gilmont days (Jun 21–26) skipped, complete the rest · W12: complete Tue–Sat (Aug 11–15) · All other weeks: complete all 7 days</div><div class="cfgrid" id="wkse"></div></div>
+    <div class="sgrid">
+      <div class="stile"><div class="sir"><span class="sico">💰</span><span class="slbl">Weekly pay</span></div><div class="sbig e" id="erne">$0</div><div class="snote">$10 per full week</div></div>
+      <div class="stile"><div class="sir"><span class="sico">📚</span><span class="slbl">Book bonus</span></div><div class="sbig e" id="bkerne">$0</div><div class="snote" id="bkcnte">$25 per Mensa book</div></div>
+    </div>
+    <div class="sh"><div class="shi e">📖</div><span class="sht">Mensa Reading Lists</span></div>
+    <div class="mlinks">
+      <a class="mlink" href="https://www.mensaforkids.org/achieve/excellence-in-reading/excellence-in-reading-7-8-list/" target="_blank" rel="noopener"><span class="mlico">🧠</span><div><div class="mlgrd">Grades 7–8 List</div><div class="mlsub">mensaforkids.org ↗</div></div></a>
+      <a class="mlink" href="https://www.mensaforkids.org/achieve/excellence-in-reading/excellence-in-reading-4-6-list/" target="_blank" rel="noopener"><span class="mlico">📚</span><div><div class="mlgrd">Grades 4–6 List</div><div class="mlsub">mensaforkids.org ↗</div></div></a>
+    </div>
+    <div class="bkzone" style="margin-top:10px">
+      <div class="bkzhdr">📖 Mensa Book Shelf — +$25 each</div>
+      <div class="bkinrow"><input type="text" id="bkie" placeholder="Enter book title…" autocomplete="off"/><button class="bkaddbtn e" id="bkae">+ Add</button></div>
+      <div id="bkle"><div class="bkempty">No books yet — start reading, scholar!</div></div>
+    </div>
+  </div>
+
+  <!-- OLIVER -->
+  <div class="pane" id="paneo">
+    <div class="sh"><div class="shi o">🎯</div><span class="sht">Daily Quests</span></div>
+    <div id="tso"></div>
+    <div class="sh"><div class="shi o">⭐</div><span class="sht">Bonus Quests — Extra Credit</span></div>
+    <div id="exo"></div>
+    <div class="bdg o" id="bdgo"><div class="bsh"></div><div class="bico" id="bicoo">🏕️</div><div class="bnm o" id="bnmo">Camp Champion!</div><div class="bdsc" id="bdsco"></div></div>
+    <div class="sh"><div class="shi o">🏆</div><span class="sht">Bonus Point Bank</span></div>
+    <div class="bbank o">
+      <div class="bbtop">
+        <div><div class="bblbl">⭐ Oliver's Bonus Points</div><div class="bbsub">25 pts earned per bonus quest</div></div>
+        <div style="text-align:right"><div class="bbpts" id="bbpto">0</div><div class="bbsub">pts earned</div></div>
+      </div>
+      <div class="bbhist" id="bbho"></div>
+    </div>
+    <div class="sh"><div class="shi o">📅</div><span class="sht">Daily Progress Calendar</span></div>
+    <div class="calbox" id="calo"></div>
+    <div class="sh"><div class="shi o">🔥</div><span class="sht">Campfire Log — 12 Weeks</span></div>
+    <div class="cfsec"><div class="cfsub">W4 &amp; W5: Gilmont days (Jun 21–26) skipped, complete the rest · W12: complete Tue–Sat (Aug 11–15) · All other weeks: complete all 7 days</div><div class="cfgrid" id="wkso"></div></div>
+    <div class="sgrid">
+      <div class="stile"><div class="sir"><span class="sico">💰</span><span class="slbl">Weekly pay</span></div><div class="sbig o" id="erno">$0</div><div class="snote">$10 per full week</div></div>
+      <div class="stile"><div class="sir"><span class="sico">📚</span><span class="slbl">Book bonus</span></div><div class="sbig o" id="bkerno">$0</div><div class="snote" id="bkcnto">$25 per Mensa book</div></div>
+    </div>
+    <div class="sh"><div class="shi o">📖</div><span class="sht">Mensa Reading List</span></div>
+    <div class="mlinks s1">
+      <a class="mlink ol" href="https://www.mensaforkids.org/achieve/excellence-in-reading/excellence-in-reading-k-3-list/" target="_blank" rel="noopener"><span class="mlico">📚</span><div><div class="mlgrd o">Grades K–3 List</div><div class="mlsub">mensaforkids.org ↗</div></div></a>
+    </div>
+    <div class="bkzone" style="margin-top:10px">
+      <div class="bkzhdr">📖 Mensa Book Shelf — +$25 each</div>
+      <div class="bkinrow"><input type="text" id="bkio" placeholder="Enter book title…" autocomplete="off"/><button class="bkaddbtn o" id="bkao">+ Add</button></div>
+      <div id="bklo"><div class="bkempty">No books yet — start reading, scholar!</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Camp config ───────────────────────────────────────────
+const CS = new Date(2026,4,26); // May 26 2026 (Tue)
+const CE = new Date(2026,7,15); // Aug 15 2026 (Sat)
+const GS = new Date(2026,5,21); // Jun 21 (Sun) — Gilmont start
+const GE = new Date(2026,5,26); // Jun 26 (Fri) — Gilmont end; Jun 27 (Sat) is a regular camp day
+const NUM_WEEKS = 12;
+
+// ── Required days per week (pre-computed, Gilmont days excluded) ──
+// W1  (idx 0): May 26–31 — Mon (Jun 1) excluded per rules; required: Tue May 26 – Sun May 31 (6 days)
+// W4  (idx 3): Jun 16–22 — Jun 21 (Sun) & Jun 22 (Mon) are Gilmont; required: Jun 16–20 (5 days)
+// W5  (idx 4): Jun 23–29 — Jun 23–26 are Gilmont; required: Jun 27–29 (3 days: Sat/Sun/Mon)
+// W12 (idx 11): Aug 11–15 (camp ends Sat Aug 15); required: all 5 days
+// All others: full 7 days
+
+function mkd(y,m,d){return new Date(y,m,d);}
+function today(){const n=new Date();return mkd(n.getFullYear(),n.getMonth(),n.getDate());}
+function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dfk(k){const[y,m,d]=k.split('-').map(Number);return mkd(y,m-1,d);}
+function addDays(d,n){return mkd(d.getFullYear(),d.getMonth(),d.getDate()+n);}
+function sameDay(a,b){return dk(a)===dk(b);}
+function inCamp(d){return d>=CS&&d<=CE;}
+function isGilmontDay(d){return d>=GS&&d<=GE;}
+
+function weekStart(wi){return addDays(CS,wi*7);}
+function weekEnd(wi){const we=addDays(CS,wi*7+6);return we>CE?CE:we;}
+
+// Returns array of date-keys that MUST be completed for this week to count
+function requiredDays(wi){
+  const ws=weekStart(wi), we=weekEnd(wi);
+  const days=[];
+  for(let d=new Date(ws);d<=we;d=addDays(d,1)){
+    if(isGilmontDay(d)) continue;           // skip Gilmont days
+    days.push(dk(new Date(d)));
+  }
+  return days;
+}
+
+function weekDone(w,wi){
+  const req=requiredDays(wi);
+  if(req.length===0) return true; // shouldn't happen but safe
+  return req.every(k=>idc(w,k));
+}
+
+function cwks(w){
+  const done=[];
+  for(let i=0;i<NUM_WEEKS;i++) if(weekDone(w,i)) done.push(i);
+  return done;
+}
+
+// ── Tasks ─────────────────────────────────────────────────
+const PLT=new Set(['Summer Academy Workbook','Common Core Math practice','Common Core ELA practice','Spelling & Grammar practice','Mathcounts practice','ISSE practice','Daily Paragraph Edit']);
+const TASKS={
+  e:{core:[
+    {t:'Summer Academy Workbook',i:'📓',time:null},
+    {t:'Common Core Math practice',i:'🔢',time:null},
+    {t:'Common Core ELA practice',i:'✏️',time:null},
+    {t:'Mathcounts practice',i:'🧮',time:null},
+    {t:'ISSE practice',i:'🏆',time:null},
+    {t:'Daily Paragraph Edit',i:'📝',time:null},
+    {t:'Vocabulary practice',i:'🔤',time:'15 min'},
+    {t:'Duolingo practice',i:'🦜',time:'15 min'},
+    {t:'Mensa reading',i:'🧠',time:'45 min'},
+    {t:'Take out the trash',i:'🗑️',time:null}
+  ],extra:[
+    {t:'Logic practice',i:'🧩'},
+    {t:'College exploration',i:'🎓'},
+    {t:'Creative writing',i:'🖊️'},
+    {t:'ISSE extra credit',i:'🏅'}
+  ]},
+  o:{core:[
+    {t:'Summer Academy Workbook',i:'📓',time:null},
+    {t:'Common Core Math practice',i:'🔢',time:null},
+    {t:'Common Core ELA practice',i:'✏️',time:null},
+    {t:'Beast Math practice',i:'🦁',time:null},
+    {t:'Spelling & Grammar practice',i:'🔤',time:null},
+    {t:'Vocabulary practice',i:'📝',time:'15 min'},
+    {t:'Duolingo practice',i:'🦜',time:'15 min'},
+    {t:'Mensa reading',i:'🧠',time:'45 min'},
+    {t:'Take out the recycling',i:'♻️',time:null}
+  ],extra:[
+    {t:'Logic practice',i:'🧩'},
+    {t:'Creative writing',i:'🖊️'},
+    {t:'Math Hero practice',i:'🦸'},
+    {t:'Multiplication practice',i:'✖️'}
+  ]}
+};
+
+const BADGES=[{i:'🌟',n:'Star Camper',d:'Shining bright!'},{i:'🏆',n:'Trophy Hunter',d:'Quest master!'},{i:'🚀',n:'Rocket Scholar',d:'Blasting through!'},{i:'🦅',n:'Eagle Scout',d:'Soaring above!'},{i:'🔥',n:'On Fire!',d:'Blazing!'},{i:'💎',n:'Diamond Day',d:'Flawless!'},{i:'🎯',n:'Bullseye',d:'Hit every target!'},{i:'🦁',n:'Lion Heart',d:'Brave!'},{i:'⚡',n:'Lightning Scholar',d:'Unstoppable!'},{i:'🌈',n:'Rainbow Ranger',d:'Brilliant!'},{i:'🎓',n:'Camp Scholar',d:'Academic excellence!'},{i:'🏅',n:'Gold Medalist',d:'Champion!'},{i:'🌊',n:'Wave Rider',d:'Riding the tide!'},{i:'🎪',n:'Camp Legend',d:"They'll remember this!"},{i:'🧠',n:'Brain Champ',d:'Mind like steel!'}];
+const CONF=['#F9C74F','#E76F51','#52B788','#C77DFF','#56CBF9','#FF6B6B','#AED9E0'];
+
+let tab='e';
+let cur=today();
+const cst={e:{yr:cur.getFullYear(),mo:cur.getMonth()},o:{yr:cur.getFullYear(),mo:cur.getMonth()}};
+let M={who:null,tn:null,ti:null,ty:null,en:[]};
+
+// ── Supabase persistence ──────────────────────────────────
+let SB_URL='',SB_KEY='';
+let S={e:{days:{},books:[]},o:{days:{},books:[]}};
+const LS_KEY='campBrainwave_live_2026';
+let syncTimer=null;
+
+async function loadConfig(){
+  try{const r=await fetch('/.netlify/functions/config');if(r.ok){const j=await r.json();SB_URL=j.supabaseUrl||'';SB_KEY=j.supabaseKey||'';}}catch(e){}
+}
+function lsLoad(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return{}}}
+function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify(S))}catch(e){}}
+async function sbLoad(){
+  if(!SB_URL||!SB_KEY)return null;
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/camp_data?id=eq.camp2026&select=data`,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+    if(!r.ok)return null;const j=await r.json();return j&&j.length?j[0].data:null;
+  }catch(e){return null;}
+}
+async function sbSave(){
+  if(!SB_URL||!SB_KEY)return;
+  setSyncState('saving');
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/camp_data`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id:'camp2026',data:S,updated_at:new Date().toISOString()})});
+    setSyncState(r.ok?'ok':'err');
+  }catch(e){setSyncState('err');}
+}
+function setSyncState(s){
+  const dot=document.getElementById('syncDot'),lbl=document.getElementById('syncLbl');
+  dot.className='syncdot'+(s==='saving'?' saving':s==='err'?' err':'');
+  lbl.textContent=s==='saving'?'saving…':s==='err'?'offline — saved locally':'synced';
+}
+function sv(){lsSave();clearTimeout(syncTimer);syncTimer=setTimeout(sbSave,800);}
+async function initData(){
+  await loadConfig();
+  const remote=await sbLoad();
+  if(remote&&(Object.keys(remote.e?.days||{}).length||Object.keys(remote.o?.days||{}).length)){
+    S=remote;lsSave();setSyncState('ok');
+  }else{
+    const local=lsLoad();if(local&&(local.e||local.o))S=local;
+    setSyncState(SB_URL?'ok':'offline — saved locally');
+  }
+  ['e','o'].forEach(w=>{if(!S[w])S[w]={days:{},books:[]};if(!S[w].books)S[w].books=[];});
+  rall();
+}
+
+function ek(w){if(!S[w])S[w]={days:{},books:[]};if(!S[w].books)S[w].books=[];}
+function gd(w,k){ek(w);if(!S[w].days[k])S[w].days[k]={core:[],extra:[],pl:{}};if(!S[w].days[k].pl)S[w].days[k].pl={};return S[w].days[k];}
+function idc(w,k){return gd(w,k).core.length===TASKS[w].core.length;}
+function totex(w){ek(w);let t=0;Object.values(S[w].days||{}).forEach(d=>t+=(d.extra||[]).length);return t;}
+
+// ── Buttons ───────────────────────────────────────────────
+document.getElementById('pbtn').addEventListener('click',()=>chd(-1));
+document.getElementById('nbtn').addEventListener('click',()=>chd(1));
+document.getElementById('tjump').addEventListener('click',jt);
+document.getElementById('tabe').addEventListener('click',()=>swt('e'));
+document.getElementById('tabo').addEventListener('click',()=>swt('o'));
+['e','o'].forEach(w=>{
+  const bi=w==='e'?'bkie':'bkio',bb=w==='e'?'bkae':'bkao';
+  document.getElementById(bi).addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();abk(w);}});
+  document.getElementById(bb).addEventListener('click',()=>abk(w));
+});
+document.getElementById('meaddbtn').addEventListener('click',madd);
+document.getElementById('mdonebtn').addEventListener('click',mcom);
+document.getElementById('mskipbtn').addEventListener('click',mcom);
+document.getElementById('meinput').addEventListener('keydown',ev=>{
+  if(ev.key==='Enter'){ev.preventDefault();ev.stopPropagation();madd();}
+  if(ev.key==='Escape'){ev.preventDefault();mcom();}
+});
+
+function chd(n){const nx=addDays(cur,n);if(nx<=today()){cur=nx;rall();}}
+function jt(){cur=today();['e','o'].forEach(w=>{cst[w].yr=cur.getFullYear();cst[w].mo=cur.getMonth();});rall();}
+function udl(){
+  const td=today(),isT=sameDay(cur,td),isG=isGilmontDay(cur);
+  document.getElementById('dlbl').textContent=(isT?'Today — ':'')+cur.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+  document.getElementById('pbtn').disabled=false;
+  document.getElementById('nbtn').disabled=isT;
+  document.getElementById('tjump').style.display=isT?'none':'inline-block';
+  document.getElementById('vpast').classList.toggle('show',!isT&&!isG);
+  document.getElementById('vgilmont').classList.toggle('show',isG);
+}
+function swt(w){tab=w;['e','o'].forEach(t=>{document.getElementById('tab'+t).classList.toggle('active',t===w);document.getElementById('pane'+t).classList.toggle('active',t===w);});uxp(w);}
+
+function rbb(w){
+  ek(w);document.getElementById(w==='e'?'bbpte':'bbpto').textContent=totex(w)*25;
+  const el=document.getElementById(w==='e'?'bbhe':'bbho');
+  const earns=[];
+  Object.entries(S[w].days||{}).forEach(([k,day])=>{
+    if((day.extra||[]).length){const d=dfk(k);earns.push({p:day.extra.length*25,lbl:day.extra.length+' bonus quest'+(day.extra.length>1?'s':''),dt:d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),k});}
+  });
+  earns.sort((a,b)=>b.k.localeCompare(a.k));
+  if(!earns.length){el.innerHTML='<div class="bbempty">Complete bonus quests to earn points!</div>';return;}
+  el.innerHTML='';
+  earns.slice(0,8).forEach(row=>{
+    const r=document.createElement('div');r.className='bbrow earn';
+    r.innerHTML=`<span>⭐ ${row.lbl} <span style="opacity:.5;font-size:10px">${row.dt}</span></span><span class="bbp">+${row.p}</span>`;
+    el.appendChild(r);
+  });
+}
+
+function omod(w,tn,ti,ty){
+  M={who:w,tn,ti,ty,en:[...(gd(w,dk(cur)).pl[tn]||[])]};
+  document.getElementById('mtit').textContent=tn;
+  document.getElementById('msub2').textContent=tn==='Daily Paragraph Edit'?'Enter the page number(s) you edited.':'What pages or activities did you complete?';
+  document.getElementById('meaddbtn').className='meaddbtn '+w;
+  document.getElementById('mdonebtn').className='mdonebtn '+w;
+  const inp=document.getElementById('meinput');
+  inp.placeholder=tn==='Daily Paragraph Edit'?'e.g. p. 22':'e.g. pp. 14–17…';
+  inp.value='';rml();
+  document.getElementById('movl').classList.add('open');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>inp.focus()));
+}
+function rml(){
+  const el=document.getElementById('melist');
+  if(!M.en.length){el.innerHTML='<div class="meempty">Type below and hit Add!</div>';return;}
+  el.innerHTML='';
+  M.en.forEach((e,i)=>{
+    const r=document.createElement('div');r.className='merow';
+    const s=document.createElement('span');s.className='metxt';s.textContent='📄 '+e;
+    const d=document.createElement('button');d.className='medel';d.textContent='✕';
+    d.addEventListener('click',()=>{M.en.splice(i,1);rml();});
+    r.appendChild(s);r.appendChild(d);el.appendChild(r);
+  });
+}
+function madd(){const inp=document.getElementById('meinput');const v=inp.value.trim();if(!v)return;M.en.push(v);inp.value='';rml();inp.focus();}
+function mcom(){
+  const{who,tn,ti,ty}=M;const k=dk(cur);const day=gd(who,k);
+  if(M.en.length)day.pl[tn]=[...M.en];
+  if(!day[ty].includes(ti))day[ty].push(ti);
+  sv();document.getElementById('movl').classList.remove('open');ft(who);
+}
+function tgt(w,ty,i,tn){
+  const k=dk(cur);const day=gd(w,k);const arr=day[ty];const pos=arr.indexOf(i);
+  if(pos!==-1){arr.splice(pos,1);delete day.pl[tn];sv();ft(w);}
+  else{if(PLT.has(tn))omod(w,tn,i,ty);else{arr.push(i);sv();ft(w);}}
+}
+function ft(w){rts(w);uxp(w);rcal(w);rwks(w);rern(w);rbb(w);}
+function burst(){const wrap=document.getElementById('cfwrap');for(let i=0;i<28;i++){const c=document.createElement('div');c.className='cfto';c.style.left=Math.random()*100+'%';c.style.background=CONF[Math.floor(Math.random()*CONF.length)];c.style.animationDelay=(Math.random()*.5)+'s';c.style.animationDuration=(.8+Math.random()*.7)+'s';wrap.appendChild(c);setTimeout(()=>c.remove(),1800);}}
+function cxp(w){const d=gd(w,dk(cur));return d.core.length*10+d.extra.length*25;}
+function uxp(w){
+  const xp=cxp(w),mx=TASKS[w].core.length*10+TASKS[w].extra.length*25;
+  document.getElementById('xpp').textContent=xp+' XP';
+  const f=document.getElementById('xpf');f.className=w==='e'?'xpfe':'xpfo';f.style.width=Math.min(100,Math.round(xp/mx*100))+'%';
+  document.getElementById('xple').style.display=w==='e'?'block':'none';
+  document.getElementById('xplo').style.display=w==='o'?'block':'none';
+}
+function rts(w){
+  const k=dk(cur);const day=gd(w,k);const pd=idc(w,k);
+  const locked=isGilmontDay(cur);
+  ['core','extra'].forEach(ty=>{
+    const el=document.getElementById((ty==='core'?'ts':'ex')+w);el.innerHTML='';
+    TASKS[w][ty].forEach((task,i)=>{
+      const chk=day[ty].includes(i);const nl=PLT.has(task.t);
+      const en=(day.pl&&day.pl[task.t])||[];const sp=nl&&chk&&en.length>0;
+      const wrap=document.createElement('div');wrap.className='tw'+(sp?' hlog':'');
+      const pts=ty==='core'?'+10 XP':'+25 XP';
+      const tb=task.time?`<span class="ttime">⏱ ${task.time}</span>`:'';
+      const nc=nl?' <span style="font-size:10px;opacity:.4">📋</span>':'';
+      const card=document.createElement('div');
+      card.className='tc'+(chk?' done':'')+(locked?' locked':'');
+      card.innerHTML=`<div class="tck ${w}">${chk?'✓':locked?'🏕️':''}</div><span style="font-size:16px;flex-shrink:0">${task.i}</span><span class="ttxt">${task.t}${nc}</span><div class="trgt">${tb}<span class="tpts${ty==='extra'?' bonus':''} ${w}">${pts}</span></div>`;
+      if(!locked) card.addEventListener('click',()=>tgt(w,ty,i,task.t));
+      wrap.appendChild(card);
+      if(sp&&!locked){
+        const pan=document.createElement('div');pan.className='lpanel';
+        en.forEach((e,ei)=>{
+          const r=document.createElement('div');r.className='lrow';
+          const s=document.createElement('span');s.className='ltxt';s.textContent='📄 '+e;
+          const d=document.createElement('button');d.className='ldel';d.textContent='✕';
+          d.addEventListener('click',ev=>{ev.stopPropagation();day.pl[task.t].splice(ei,1);if(!day.pl[task.t].length)delete day.pl[task.t];sv();rts(w);});
+          r.appendChild(s);r.appendChild(d);pan.appendChild(r);
+        });
+        const ar=document.createElement('div');ar.className='linrow';
+        const inp=document.createElement('input');inp.className='linput';inp.type='text';inp.autocomplete='off';
+        inp.placeholder=task.t==='Daily Paragraph Edit'?'Add page number…':'Add more pages…';
+        const btn=document.createElement('button');btn.className='lbtn '+w;btn.textContent='+ Add';
+        const da=()=>{const v=inp.value.trim();if(!v)return;if(!day.pl[task.t])day.pl[task.t]=[];day.pl[task.t].push(v);inp.value='';sv();rts(w);};
+        btn.addEventListener('click',ev=>{ev.stopPropagation();da();});
+        inp.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();ev.stopPropagation();da();}});
+        ar.appendChild(inp);ar.appendChild(btn);pan.appendChild(ar);wrap.appendChild(pan);
+      }
+      el.appendChild(wrap);
+    });
+  });
+  if(idc(w,k)&&!pd&&!locked)burst();
+  rbdg(w);
+}
+function rbdg(w){
+  const all=idc(w,dk(cur));document.getElementById('bdg'+w).classList.toggle('show',all);
+  if(all){
+    const dn=Math.floor((cur-CS)/86400000);const b=BADGES[Math.abs(dn)%BADGES.length];
+    document.getElementById('bic'+(w==='e'?'e':'oo')).textContent=b.i;
+    document.getElementById('bnm'+w).textContent=b.n;
+    const ex=gd(w,dk(cur)).extra.length;
+    document.getElementById('bdsc'+w).textContent=b.d+(ex>0?` +${ex} bonus quest${ex>1?'s':''}!`:'');
+  }
+}
+function rcal(w){
+  const el=document.getElementById('cal'+w);const cs=cst[w];const td=today();
+  const fi=new Date(cs.yr,cs.mo,1);const la=new Date(cs.yr,cs.mo+1,0);
+  const mn=fi.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  let h=`<div class="calnav"><button class="cnbtn" data-w="${w}" data-d="-1">◀</button><span class="cmth">${mn}</span><button class="cnbtn" data-w="${w}" data-d="1">▶</button></div>`;
+  h+=`<div class="cgrid"><div class="cdow">Su</div><div class="cdow">Mo</div><div class="cdow">Tu</div><div class="cdow">We</div><div class="cdow">Th</div><div class="cdow">Fr</div><div class="cdow">Sa</div>`;
+  for(let i=0;i<fi.getDay();i++)h+=`<div class="cday empty"></div>`;
+  for(let d=1;d<=la.getDate();d++){
+    const td2=new Date(cs.yr,cs.mo,d);const k=dk(td2);
+    const isFut=td2>td,isT=sameDay(td2,td),isSel=sameDay(td2,cur);
+    const ic=inCamp(td2),isG=isGilmontDay(td2);
+    let cl='cday',star='';
+    if(isFut){cl+=' fut';}
+    else if(isG){cl+=' gilmont';}
+    else if(ic){
+      const cp=idc(w,k),partial=gd(w,k).core.length>0&&!cp;
+      if(cp){cl+=` comp ${w}`;star='⭐';}
+      else if(partial)cl+=` part ${w}`;
+      else cl+=' incamp';
+    }else{cl+=' ocamp';}
+    if(isT)cl+=' tod';if(isSel)cl+=' sel';
+    const clickable=!isFut&&!isG;
+    h+=`<div class="${cl}"${clickable?` data-k="${k}"`:''}><span>${d}</span>${star?`<span class="cstar">${star}</span>`:isG?`<span class="cstar">🏕️</span>`:''}</div>`;
+  }
+  h+=`</div><div class="cleg">
+    <div class="cli"><div class="cld" style="background:${w==='e'?'var(--e)':'var(--o)'};border-color:${w==='e'?'#5a1f80':'#0d4a80'}"></div><span style="color:${w==='e'?'var(--e)':'var(--o)'}">All done ⭐</span></div>
+    <div class="cli"><div class="cld" style="background:${w==='e'?'#ffe4b5':'#b8e4ff'};border-color:${w==='e'?'#f0c040':'#60b8f0'}"></div>Partial</div>
+    <div class="cli"><div class="cld" style="background:#f0ece4;border-color:#e4ded4"></div>Camp day</div>
+    <div class="cli"><div class="cld" style="background:#dceeff;border-color:#aacce8"></div>Gilmont 🏕️</div>
+    <div class="cli"><div class="cld" style="outline:2px solid var(--gold);border-color:transparent"></div>Today</div>
+  </div>`;
+  el.innerHTML=h;
+  el.querySelectorAll('.cday[data-k]').forEach(c=>{
+    c.addEventListener('click',()=>{cur=dfk(c.dataset.k);['e','o'].forEach(x=>{cst[x].yr=cur.getFullYear();cst[x].mo=cur.getMonth();});rall();});
+  });
+  el.querySelectorAll('.cnbtn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const x=b.dataset.w,dr=parseInt(b.dataset.d);
+      cst[x].mo+=dr;if(cst[x].mo>11){cst[x].mo=0;cst[x].yr++;}if(cst[x].mo<0){cst[x].mo=11;cst[x].yr--;}
+      rcal(x);
+    });
+  });
+}
+function rwks(w){
+  const el=document.getElementById('wks'+w);el.innerHTML='';const done=cwks(w);
+  for(let i=0;i<NUM_WEEKS;i++){
+    const c=document.createElement('div');const ok=done.includes(i);
+    // Weeks with Gilmont days but not fully Gilmont — show partial tent indicator
+    const hasGilmont=(i===3||i===4); // W4 & W5 have Gilmont days
+    if(ok){c.className='cfcell done '+w;c.innerHTML=`<span class="cff">🔥</span><span class="cfn">W${i+1}</span>`;}
+    else if(hasGilmont){c.className='cfcell skip';c.innerHTML=`<span style="font-size:10px">🏕️</span><span class="cfn">W${i+1}</span>`;}
+    else{c.className='cfcell';c.innerHTML=`<span class="cfn">W${i+1}</span>`;}
+    el.appendChild(c);
+  }
+}
+function rern(w){ek(w);const wk=cwks(w).length,bk=(S[w].books||[]).length;document.getElementById('ern'+w).textContent='$'+(wk*10);document.getElementById('bkern'+w).textContent='$'+(bk*25);document.getElementById('bkcnt'+w).textContent=bk+' book'+(bk!==1?'s':'')+' logged';}
+function abk(w){const inp=document.getElementById(w==='e'?'bkie':'bkio');const t=inp.value.trim();if(!t)return;ek(w);S[w].books.push({t,dt:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})});sv();inp.value='';rbks(w);rern(w);}
+function rbks(w){
+  const el=document.getElementById('bkl'+w);ek(w);const bks=S[w].books||[];
+  if(!bks.length){el.innerHTML='<div class="bkempty">No books yet — start reading, scholar!</div>';return;}
+  el.innerHTML='';
+  bks.forEach((b,i)=>{
+    const item=document.createElement('div');item.className='bkitem';
+    const ico=document.createElement('span');ico.className='bkico';ico.textContent='📗';
+    const inf=document.createElement('div');inf.className='bkinfo';
+    const tt=document.createElement('div');tt.className='bkttl';tt.textContent=b.t;
+    const dt=document.createElement('div');dt.className='bkdt';dt.textContent='Added '+b.dt;
+    inf.appendChild(tt);inf.appendChild(dt);
+    const rw=document.createElement('span');rw.className='bkrew '+w;rw.textContent='+$25';
+    const dl=document.createElement('button');dl.className='bkdel';dl.textContent='✕';
+    dl.addEventListener('click',()=>{S[w].books.splice(i,1);sv();rbks(w);rern(w);});
+    item.appendChild(ico);item.appendChild(inf);item.appendChild(rw);item.appendChild(dl);el.appendChild(item);
+  });
+}
+function rall(){udl();['e','o'].forEach(w=>{rts(w);rcal(w);rwks(w);rern(w);rbks(w);rbb(w);});uxp(tab);}
+initData();
+</script>
+</body>
+</html>
