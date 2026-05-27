@@ -189,7 +189,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
 </style>
 </head>
 <body>
-
+ 
 <div class="movl" id="movl">
   <div class="mbox">
     <div class="mtit" id="mtit">Log Pages</div>
@@ -199,7 +199,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
     <div class="mfoot"><button class="mdonebtn" id="mdonebtn">✓ Mark Complete</button><button class="mskipbtn" id="mskipbtn">Skip</button></div>
   </div>
 </div>
-
+ 
 <div class="app">
   <div class="cfwrap" id="cfwrap"></div>
   <div class="banner">
@@ -214,12 +214,12 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
     <div style="text-align:center;margin-top:5px"><button class="tjump" id="tjump">↩ Back to Today</button></div>
     <div class="syncbar"><span class="syncdot" id="syncDot"></span><span id="syncLbl">synced</span></div>
   </div>
-
+ 
   <div class="ctabs">
     <div class="ctab e active" id="tabe"><span class="ctab-em">🔮</span><span class="ctab-name">Cabin Elliot</span></div>
     <div class="ctab o" id="tabo"><span class="ctab-em">🌊</span><span class="ctab-name">Cabin Oliver</span></div>
   </div>
-
+ 
   <div class="xpa">
     <div class="xpr">
       <span class="xpl" id="xple">🏕️ Elliot's XP</span>
@@ -228,10 +228,10 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
     </div>
     <div class="xpt"><div id="xpf" class="xpfe" style="width:0%"></div></div>
   </div>
-
+ 
   <div class="vpast" id="vpast">📅 Viewing a past day — all tasks are fully editable!</div>
   <div class="vgilmont" id="vgilmont">🏕️ Gilmont week — no quests required! Enjoy camp!</div>
-
+ 
   <!-- ELLIOT -->
   <div class="pane active" id="panee">
     <div class="sh"><div class="shi e">🎯</div><span class="sht">Daily Quests</span></div>
@@ -266,7 +266,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
       <div id="bkle"><div class="bkempty">No books yet — start reading, scholar!</div></div>
     </div>
   </div>
-
+ 
   <!-- OLIVER -->
   <div class="pane" id="paneo">
     <div class="sh"><div class="shi o">🎯</div><span class="sht">Daily Quests</span></div>
@@ -301,7 +301,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:#2C1810;overf
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ── Camp config ───────────────────────────────────────────
 const CS = new Date(2026,4,26); // May 26 2026 (Tue)
@@ -309,14 +309,14 @@ const CE = new Date(2026,7,15); // Aug 15 2026 (Sat)
 const GS = new Date(2026,5,21); // Jun 21 (Sun) — Gilmont start
 const GE = new Date(2026,5,26); // Jun 26 (Fri) — Gilmont end; Jun 27 (Sat) is a regular camp day
 const NUM_WEEKS = 12;
-
+ 
 // ── Required days per week (pre-computed, Gilmont days excluded) ──
 // W1  (idx 0): May 26–31 — Mon (Jun 1) excluded per rules; required: Tue May 26 – Sun May 31 (6 days)
 // W4  (idx 3): Jun 16–22 — Jun 21 (Sun) & Jun 22 (Mon) are Gilmont; required: Jun 16–20 (5 days)
 // W5  (idx 4): Jun 23–29 — Jun 23–26 are Gilmont; required: Jun 27–29 (3 days: Sat/Sun/Mon)
 // W12 (idx 11): Aug 11–15 (camp ends Sat Aug 15); required: all 5 days
 // All others: full 7 days
-
+ 
 function mkd(y,m,d){return new Date(y,m,d);}
 function today(){const n=new Date();return mkd(n.getFullYear(),n.getMonth(),n.getDate());}
 function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -325,10 +325,10 @@ function addDays(d,n){return mkd(d.getFullYear(),d.getMonth(),d.getDate()+n);}
 function sameDay(a,b){return dk(a)===dk(b);}
 function inCamp(d){return d>=CS&&d<=CE;}
 function isGilmontDay(d){return d>=GS&&d<=GE;}
-
+ 
 function weekStart(wi){return addDays(CS,wi*7);}
 function weekEnd(wi){const we=addDays(CS,wi*7+6);return we>CE?CE:we;}
-
+ 
 // Returns array of date-keys that MUST be completed for this week to count
 function requiredDays(wi){
   const ws=weekStart(wi), we=weekEnd(wi);
@@ -339,19 +339,19 @@ function requiredDays(wi){
   }
   return days;
 }
-
+ 
 function weekDone(w,wi){
   const req=requiredDays(wi);
   if(req.length===0) return true; // shouldn't happen but safe
   return req.every(k=>idc(w,k));
 }
-
+ 
 function cwks(w){
   const done=[];
   for(let i=0;i<NUM_WEEKS;i++) if(weekDone(w,i)) done.push(i);
   return done;
 }
-
+ 
 // ── Tasks ─────────────────────────────────────────────────
 const PLT=new Set(['Summer Academy Workbook','Common Core Math practice','Common Core ELA practice','Spelling & Grammar practice','Mathcounts practice','ISSE practice','Daily Paragraph Edit']);
 const TASKS={
@@ -389,24 +389,22 @@ const TASKS={
     {t:'Multiplication practice',i:'✖️'}
   ]}
 };
-
+ 
 const BADGES=[{i:'🌟',n:'Star Camper',d:'Shining bright!'},{i:'🏆',n:'Trophy Hunter',d:'Quest master!'},{i:'🚀',n:'Rocket Scholar',d:'Blasting through!'},{i:'🦅',n:'Eagle Scout',d:'Soaring above!'},{i:'🔥',n:'On Fire!',d:'Blazing!'},{i:'💎',n:'Diamond Day',d:'Flawless!'},{i:'🎯',n:'Bullseye',d:'Hit every target!'},{i:'🦁',n:'Lion Heart',d:'Brave!'},{i:'⚡',n:'Lightning Scholar',d:'Unstoppable!'},{i:'🌈',n:'Rainbow Ranger',d:'Brilliant!'},{i:'🎓',n:'Camp Scholar',d:'Academic excellence!'},{i:'🏅',n:'Gold Medalist',d:'Champion!'},{i:'🌊',n:'Wave Rider',d:'Riding the tide!'},{i:'🎪',n:'Camp Legend',d:"They'll remember this!"},{i:'🧠',n:'Brain Champ',d:'Mind like steel!'}];
 const CONF=['#F9C74F','#E76F51','#52B788','#C77DFF','#56CBF9','#FF6B6B','#AED9E0'];
-
+ 
 let tab='e';
 let cur=today();
 const cst={e:{yr:cur.getFullYear(),mo:cur.getMonth()},o:{yr:cur.getFullYear(),mo:cur.getMonth()}};
 let M={who:null,tn:null,ti:null,ty:null,en:[]};
-
+ 
 // ── Supabase persistence ──────────────────────────────────
-let SB_URL='',SB_KEY='';
+// Supabase credentials — anon/public key is safe in client-side code
+const SB_URL='https://iajkhrkwsuabpvyvslqk.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlhamtocmt3c3VhYnB2eXZzbHFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTM2NjEsImV4cCI6MjA5NTM4OTY2MX0.VS3lu-OHnYrucsnt0cF07IhoJQo4unqvmFJQBvt_aVY';
 let S={e:{days:{},books:[]},o:{days:{},books:[]}};
 const LS_KEY='campBrainwave_live_2026';
 let syncTimer=null;
-
-async function loadConfig(){
-  try{const r=await fetch('/.netlify/functions/config');if(r.ok){const j=await r.json();SB_URL=j.supabaseUrl||'';SB_KEY=j.supabaseKey||'';}}catch(e){}
-}
 function lsLoad(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return{}}}
 function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify(S))}catch(e){}}
 async function sbLoad(){
@@ -431,23 +429,23 @@ function setSyncState(s){
 }
 function sv(){lsSave();clearTimeout(syncTimer);syncTimer=setTimeout(sbSave,800);}
 async function initData(){
-  await loadConfig();
+  // Try Supabase first, fall back to localStorage
   const remote=await sbLoad();
   if(remote&&(Object.keys(remote.e?.days||{}).length||Object.keys(remote.o?.days||{}).length)){
     S=remote;lsSave();setSyncState('ok');
   }else{
     const local=lsLoad();if(local&&(local.e||local.o))S=local;
-    setSyncState(SB_URL?'ok':'offline — saved locally');
+    setSyncState(SB_URL?'ok':'err');
   }
   ['e','o'].forEach(w=>{if(!S[w])S[w]={days:{},books:[]};if(!S[w].books)S[w].books=[];});
   rall();
 }
-
+ 
 function ek(w){if(!S[w])S[w]={days:{},books:[]};if(!S[w].books)S[w].books=[];}
 function gd(w,k){ek(w);if(!S[w].days[k])S[w].days[k]={core:[],extra:[],pl:{}};if(!S[w].days[k].pl)S[w].days[k].pl={};return S[w].days[k];}
 function idc(w,k){return gd(w,k).core.length===TASKS[w].core.length;}
 function totex(w){ek(w);let t=0;Object.values(S[w].days||{}).forEach(d=>t+=(d.extra||[]).length);return t;}
-
+ 
 // ── Buttons ───────────────────────────────────────────────
 document.getElementById('pbtn').addEventListener('click',()=>chd(-1));
 document.getElementById('nbtn').addEventListener('click',()=>chd(1));
@@ -466,7 +464,7 @@ document.getElementById('meinput').addEventListener('keydown',ev=>{
   if(ev.key==='Enter'){ev.preventDefault();ev.stopPropagation();madd();}
   if(ev.key==='Escape'){ev.preventDefault();mcom();}
 });
-
+ 
 function chd(n){const nx=addDays(cur,n);if(nx<=today()){cur=nx;rall();}}
 function jt(){cur=today();['e','o'].forEach(w=>{cst[w].yr=cur.getFullYear();cst[w].mo=cur.getMonth();});rall();}
 function udl(){
@@ -479,7 +477,7 @@ function udl(){
   document.getElementById('vgilmont').classList.toggle('show',isG);
 }
 function swt(w){tab=w;['e','o'].forEach(t=>{document.getElementById('tab'+t).classList.toggle('active',t===w);document.getElementById('pane'+t).classList.toggle('active',t===w);});uxp(w);}
-
+ 
 function rbb(w){
   ek(w);document.getElementById(w==='e'?'bbpte':'bbpto').textContent=totex(w)*25;
   const el=document.getElementById(w==='e'?'bbhe':'bbho');
@@ -496,7 +494,7 @@ function rbb(w){
     el.appendChild(r);
   });
 }
-
+ 
 function omod(w,tn,ti,ty){
   M={who:w,tn,ti,ty,en:[...(gd(w,dk(cur)).pl[tn]||[])]};
   document.getElementById('mtit').textContent=tn;
