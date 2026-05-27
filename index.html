@@ -404,39 +404,70 @@ const SB_URL='https://iajkhrkwsuabpvyvslqk.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlhamtocmt3c3VhYnB2eXZzbHFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTM2NjEsImV4cCI6MjA5NTM4OTY2MX0.VS3lu-OHnYrucsnt0cF07IhoJQo4unqvmFJQBvt_aVY';
 let S={e:{days:{},books:[]},o:{days:{},books:[]}};
 const LS_KEY='campBrainwave_live_2026';
-let syncTimer=null;
-function lsLoad(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return{}}}
-function lsSave(){try{localStorage.setItem(LS_KEY,JSON.stringify(S))}catch(e){}}
-async function sbLoad(){
+// ── Per-boy independent storage ───────────────────────────
+// Each boy has his own Supabase row (camp2026_e / camp2026_o)
+// so saving Elliot never touches Oliver's data and vice versa.
+ 
+function lsLoadW(w){try{return JSON.parse(localStorage.getItem(LS_KEY+'_'+w)||'null')}catch(e){return null}}
+function lsSaveW(w){try{localStorage.setItem(LS_KEY+'_'+w,JSON.stringify(S[w]))}catch(e){}}
+ 
+async function sbLoadW(w){
   if(!SB_URL||!SB_KEY)return null;
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/camp_data?id=eq.camp2026&select=data`,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
-    if(!r.ok)return null;const j=await r.json();return j&&j.length?j[0].data:null;
+    const r=await fetch(`${SB_URL}/rest/v1/camp_data?id=eq.camp2026_${w}&select=data`,{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    });
+    if(!r.ok)return null;
+    const j=await r.json();
+    return j&&j.length?j[0].data:null;
   }catch(e){return null;}
 }
-async function sbSave(){
-  if(!SB_URL||!SB_KEY)return;
-  setSyncState('saving');
+ 
+async function sbSaveW(w){
+  if(!SB_URL||!SB_KEY)return false;
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/camp_data`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({id:'camp2026',data:S,updated_at:new Date().toISOString()})});
-    setSyncState(r.ok?'ok':'err');
-  }catch(e){setSyncState('err');}
+    const r=await fetch(`${SB_URL}/rest/v1/camp_data`,{
+      method:'POST',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({id:'camp2026_'+w,data:S[w],updated_at:new Date().toISOString()})
+    });
+    return r.ok;
+  }catch(e){return false;}
 }
+ 
+// Sync timers are per-boy so one boy's save never triggers the other's
+const syncTimers={e:null,o:null};
+ 
 function setSyncState(s){
   const dot=document.getElementById('syncDot'),lbl=document.getElementById('syncLbl');
   dot.className='syncdot'+(s==='saving'?' saving':s==='err'?' err':'');
   lbl.textContent=s==='saving'?'saving…':s==='err'?'offline — saved locally':'synced';
 }
-function sv(){lsSave();clearTimeout(syncTimer);syncTimer=setTimeout(sbSave,800);}
+ 
+// sv(w) — only saves the one boy whose data actually changed
+function sv(w){
+  lsSaveW(w);
+  clearTimeout(syncTimers[w]);
+  setSyncState('saving');
+  syncTimers[w]=setTimeout(async()=>{
+    const ok=await sbSaveW(w);
+    setSyncState(ok?'ok':'err');
+  },800);
+}
+ 
 async function initData(){
-  // Try Supabase first, fall back to localStorage
-  const remote=await sbLoad();
-  if(remote&&(Object.keys(remote.e?.days||{}).length||Object.keys(remote.o?.days||{}).length)){
-    S=remote;lsSave();setSyncState('ok');
-  }else{
-    const local=lsLoad();if(local&&(local.e||local.o))S=local;
-    setSyncState(SB_URL?'ok':'err');
-  }
+  // Load each boy independently from Supabase, fall back to localStorage
+  const results=await Promise.all(['e','o'].map(async w=>{
+    const remote=await sbLoadW(w);
+    if(remote&&(Object.keys(remote.days||{}).length||( remote.books&&remote.books.length))){
+      S[w]=remote; lsSaveW(w); return true;
+    }else{
+      const local=lsLoadW(w);
+      if(local) S[w]=local;
+      return false;
+    }
+  }));
+  setSyncState(results.some(Boolean)?'ok':'err');
   ['e','o'].forEach(w=>{if(!S[w])S[w]={days:{},books:[]};if(!S[w].books)S[w].books=[];});
   rall();
 }
@@ -524,12 +555,12 @@ function mcom(){
   const{who,tn,ti,ty}=M;const k=dk(cur);const day=gd(who,k);
   if(M.en.length)day.pl[tn]=[...M.en];
   if(!day[ty].includes(ti))day[ty].push(ti);
-  sv();document.getElementById('movl').classList.remove('open');ft(who);
+  sv(who);document.getElementById('movl').classList.remove('open');ft(who);
 }
 function tgt(w,ty,i,tn){
   const k=dk(cur);const day=gd(w,k);const arr=day[ty];const pos=arr.indexOf(i);
-  if(pos!==-1){arr.splice(pos,1);delete day.pl[tn];sv();ft(w);}
-  else{if(PLT.has(tn))omod(w,tn,i,ty);else{arr.push(i);sv();ft(w);}}
+  if(pos!==-1){arr.splice(pos,1);delete day.pl[tn];sv(w);ft(w);}
+  else{if(PLT.has(tn))omod(w,tn,i,ty);else{arr.push(i);sv(w);ft(w);}}
 }
 function ft(w){rts(w);uxp(w);rcal(w);rwks(w);rern(w);rbb(w);}
 function burst(){const wrap=document.getElementById('cfwrap');for(let i=0;i<28;i++){const c=document.createElement('div');c.className='cfto';c.style.left=Math.random()*100+'%';c.style.background=CONF[Math.floor(Math.random()*CONF.length)];c.style.animationDelay=(Math.random()*.5)+'s';c.style.animationDuration=(.8+Math.random()*.7)+'s';wrap.appendChild(c);setTimeout(()=>c.remove(),1800);}}
@@ -564,14 +595,14 @@ function rts(w){
           const r=document.createElement('div');r.className='lrow';
           const s=document.createElement('span');s.className='ltxt';s.textContent='📄 '+e;
           const d=document.createElement('button');d.className='ldel';d.textContent='✕';
-          d.addEventListener('click',ev=>{ev.stopPropagation();day.pl[task.t].splice(ei,1);if(!day.pl[task.t].length)delete day.pl[task.t];sv();rts(w);});
+          d.addEventListener('click',ev=>{ev.stopPropagation();day.pl[task.t].splice(ei,1);if(!day.pl[task.t].length)delete day.pl[task.t];sv(w);rts(w);});
           r.appendChild(s);r.appendChild(d);pan.appendChild(r);
         });
         const ar=document.createElement('div');ar.className='linrow';
         const inp=document.createElement('input');inp.className='linput';inp.type='text';inp.autocomplete='off';
         inp.placeholder=task.t==='Daily Paragraph Edit'?'Add page number…':'Add more pages…';
         const btn=document.createElement('button');btn.className='lbtn '+w;btn.textContent='+ Add';
-        const da=()=>{const v=inp.value.trim();if(!v)return;if(!day.pl[task.t])day.pl[task.t]=[];day.pl[task.t].push(v);inp.value='';sv();rts(w);};
+        const da=()=>{const v=inp.value.trim();if(!v)return;if(!day.pl[task.t])day.pl[task.t]=[];day.pl[task.t].push(v);inp.value='';sv(w);rts(w);};
         btn.addEventListener('click',ev=>{ev.stopPropagation();da();});
         inp.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();ev.stopPropagation();da();}});
         ar.appendChild(inp);ar.appendChild(btn);pan.appendChild(ar);wrap.appendChild(pan);
@@ -648,7 +679,7 @@ function rwks(w){
   }
 }
 function rern(w){ek(w);const wk=cwks(w).length,bk=(S[w].books||[]).length;document.getElementById('ern'+w).textContent='$'+(wk*10);document.getElementById('bkern'+w).textContent='$'+(bk*25);document.getElementById('bkcnt'+w).textContent=bk+' book'+(bk!==1?'s':'')+' logged';}
-function abk(w){const inp=document.getElementById(w==='e'?'bkie':'bkio');const t=inp.value.trim();if(!t)return;ek(w);S[w].books.push({t,dt:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})});sv();inp.value='';rbks(w);rern(w);}
+function abk(w){const inp=document.getElementById(w==='e'?'bkie':'bkio');const t=inp.value.trim();if(!t)return;ek(w);S[w].books.push({t,dt:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})});sv(w);inp.value='';rbks(w);rern(w);}
 function rbks(w){
   const el=document.getElementById('bkl'+w);ek(w);const bks=S[w].books||[];
   if(!bks.length){el.innerHTML='<div class="bkempty">No books yet — start reading, scholar!</div>';return;}
@@ -662,7 +693,7 @@ function rbks(w){
     inf.appendChild(tt);inf.appendChild(dt);
     const rw=document.createElement('span');rw.className='bkrew '+w;rw.textContent='+$25';
     const dl=document.createElement('button');dl.className='bkdel';dl.textContent='✕';
-    dl.addEventListener('click',()=>{S[w].books.splice(i,1);sv();rbks(w);rern(w);});
+    dl.addEventListener('click',()=>{S[w].books.splice(i,1);sv(w);rbks(w);rern(w);});
     item.appendChild(ico);item.appendChild(inf);item.appendChild(rw);item.appendChild(dl);el.appendChild(item);
   });
 }
